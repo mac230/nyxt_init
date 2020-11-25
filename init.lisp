@@ -105,7 +105,8 @@
 		  (mac-new-buffer-jump
 		   (str:concat
 		    "https://pubmed.ncbi.nlm.nih.gov/?term="
-		    search)))
+		    search
+		    "&size=200")))
 		 ((string= entry "g")
 		  (mac-new-buffer-jump
 		   (str:concat
@@ -119,7 +120,7 @@
 		 ((string= entry "w")
 		  (mac-new-buffer-jump
 		   (str:concat
-"http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search="
+		    "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search="
 		    search)))
 		 ((string= entry "y")
 		  (mac-new-buffer-jump
@@ -134,6 +135,64 @@
 		    search)))
 		 (t
 		  (mac-new-buffer-jump
+		   (str:concat
+		    "https://duckduckgo.com/?q="
+		    search))))
+		))
+
+(define-command same-buffer-engine-mode-emulator ()
+  "Function for emulating emacs engine-mode in nyxt that loads queries in the
+current buffer."
+  (with-result* ((entry (read-from-minibuffer
+                         (make-minibuffer
+                          :input-prompt "Input entry"
+                          :default-modes '(minibuffer-tag-mode minibuffer-mode)
+                          :multi-selection-p nil)))
+		 (search (read-from-minibuffer
+			(make-minibuffer
+			 :input-prompt "Search term"
+			 :default-modes '(minibuffer-tag-mode minibuffer-mode)
+			 :multi-selection-p nil))))
+		(cond 
+		 ((string= entry "d")
+		  (buffer-load
+		   (str:concat
+		    "https://duckduckgo.com/?q="
+		    search)))
+		 ((string= entry "p")
+		  (buffer-load
+		   (str:concat
+		    "https://pubmed.ncbi.nlm.nih.gov/?term="
+		    search
+		    "&size=200")))
+		 ((string= entry "g")
+		  (buffer-load
+		   (str:concat
+		    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+		    search)))
+		 ((string= entry "m")
+		  (buffer-load
+		   (str:concat
+		    "http://maps.google.com/maps?q="
+		    search)))
+		 ((string= entry "w")
+		  (buffer-load
+		   (str:concat
+		    "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search="
+		    search)))
+		 ((string= entry "y")
+		  (buffer-load
+		   (str:concat
+		    "https://www.yeastgenome.org/search?q="
+		    search
+		    "&is_quick=true")))
+		 ((string= entry "h")
+		  (buffer-load
+		   (str:concat
+		    "https://github.com/search?ref=simplesearch&q="
+		    search)))
+		 (t
+		  (buffer-load
 		   (str:concat
 		    "https://duckduckgo.com/?q="
 		    search))))
@@ -175,6 +234,7 @@
   "M-z"   'mac-scroll-up
   "M-v"   'mac-scroll-down
   "C-l"   'mac-quick-url-jump
+  "C-c ." 'same-buffer-engine-mode-emulator
   "C-x ." 'engine-mode-emulator
   "C-z"   'store-session-by-name
   "C-."   'mac-previous-buffer
