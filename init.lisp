@@ -42,6 +42,8 @@
                  (make-buffer-focus :url "https://github.com/"))
                 ((string= entry "m")
                  (make-buffer-focus :url "https://maps.google.com/"))
+                ((string= entry "q")
+                 (make-buffer-focus :url "https://app.quartzy.com"))
 		(t
 		 (set-url-new-buffer)))
 	       ))
@@ -75,8 +77,10 @@
 		 (buffer-load "https://yeastgenome.org/" :buffer (current-buffer)))
 		((string= entry "h")
 		 (buffer-load "https://github.com/" :buffer (current-buffer)))
+                ((string= entry "q")
+		 (buffer-load "https://app.quartzy.com" :buffer (current-buffer)))
 		(t
-		 (buffer-load "https://www.duckduckgo.com" :buffer (current-buffer)))
+		 (set-url :new-buffer-p nil :prefill-current-url-p nil))
 	       )))
 
 (define-command engine-mode-emulator ()
@@ -227,7 +231,6 @@ current buffer."
   "C-tab" 'switch-buffer
   "M-j"   'nyxt/web-mode:follow-hint-new-buffer-focus
   "C-j"   'nyxt/web-mode:follow-hint
-;;  "C-;"   'nyxt/input-edit:delete-backwards
   "C-i"   'mac-quick-url-new-buffer-jump
   "C-w"   'nyxt/web-mode:copy
   "M-w"   'copy-url
